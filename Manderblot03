@@ -2,15 +2,24 @@ float modulus = 0;
 
 void setup() {
   size(800, 800);
-  colorMode(HSB, 300);
+  colorMode(HSB, 300); // Using HSB mode instead of RGB
   drawImage();
 }
 
+float huePicker(int n) {
+  // n is num of iterations before passing escape radius
+  // selects a hue with an algorithm depending 
+  // on the value of modulus before passing the
+  // escape radius
+  return n - (log (log (sqrt(modulus))));
+}
+
 void drawImage() {
+  // Creates an image based on the Julia Set fractals
   /* general aglorithm: for every pixel, 
    iterate z_new = z_old² + c 
-   on the complex plane 
-   until it leaves the 
+   on the complex plane (represented by XY plane here)
+   until it leaves a 
    circle around the 
    origin with given escapeRadius. 
    The number of iterations 
@@ -25,34 +34,33 @@ void drawImage() {
   //and the y-axis represents the "imaginary" component.
   //Adjust to zoom in/out to different regions.
   
-  float w = 0.4;
-  float h = (w * height) / width;
+  float xupperbound = 0.4;
+  float yupperbound = (xupperbound * height) / width;
 
   // Initial Position of image. Adjust to move around.
-  float xmin = -w/2;
-  float ymin = -h/2;
+  float xlowerbound = -xupperbound/2;
+  float ylowerbound = -yupperbound/2;
 
-  // Make sure we crealn write to the pixels[] array.
-  // Only need to do this once since we don't do any other drawing.
+  // only do once because it only draws once
   loadPixels();
 
-  // Maximum number of iterations for each point on the complex plane
+  // Max iterations for each pixel
   int maxiterations = 220;
 
-  // x goes from xmin to xmax
-  float xmax = xmin + w;
-  // y goes from ymin to ymax
-  float ymax = ymin + h;
+  // x goes from xlowerbound to xupperbound
+  float xmax = xlowerbound + xupperbound;
+  // y goes from ylowerbound to yupperbound
+  float ymax = ylowerbound + yupperbound;
 
   // creallculate amount we increment x,y for each pixel
-  float dx = (xmax - xmin) / (width);
-  float dy = (ymax - ymin) / (height);
+  float dx = (xmax - xlowerbound) / (width);
+  float dy = (ymax - ylowerbound) / (height);
 
   // Start y
-  float y = ymin;
+  float y = ylowerbound;
   for (int j = 0; j < height; j++) {
     // Start x
-    float x = xmin;
+    float x = xlowerbound;
     for (int i = 0; i < width; i++) {
       // Now we test, as we iterate z = z^2 + cm does z tend towards infinity?
       float a = x;
@@ -69,17 +77,15 @@ void drawImage() {
         float twoab = 2.0 * a * b;
         a = aa - bb + creal;
         b = twoab + cimaginary;
-       
-        
         n++;
       }
 
       // We color each pixel based on how long it takes to get to infinity
       // If we never got there, let's pick the color black
       if (n == maxiterations) {
-        pixels[i+j*width] = color(0);
+        pixels[i+j*width] = color(0); // 
       } else {
-        float hue = colorPicker(n);
+        float hue = huePicker(n);
         pixels[i+j*width] = color(hue, 255, 255);
       }
       x += dx;
@@ -89,10 +95,3 @@ void drawImage() {
   updatePixels();
 }
 
-float colorPicker(int n) {
-  // n is num of iterations
-  //print(n - (log (log (sqrt(modulus)))));
-  return n - (log (log (sqrt(modulus))));
-  //return sqrt(float(n)/420);
-  //return sqrt(float(n)/maxiterations);
-}
