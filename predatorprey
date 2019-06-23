@@ -1,0 +1,32 @@
+//Animal[] myAnimals = new Animal[1];
+//Vehicle[] myVehicles = new Vehicle[1];
+//float distance;
+
+//void setup() {
+//  size(800,800);
+//  for (int i = 0; i < myAnimals.length; i++) {
+//    myAnimals[i] = new Animal();
+//  }
+//  for (int j = 0; j < myVehicles.length; j++) {
+//    myVehicles[j] = new Vehicle(width/2,height/2);
+//  }
+//}
+
+//void draw() {
+  
+//  background(240);
+//  for (int i = 0; i < myAnimals.length; i++) {
+//    distance = sqrt(sq(myAnimals[i].location.x-myVehicles[i].location.x) + sq(myAnimals[i].location.y-myVehicles[i].location.y));
+//    if (distance < 100) {
+//      myAnimals[i].avoid(myVehicles[i].location);
+//    }
+//    myAnimals[i].update();
+//    myAnimals[i].display();
+//  }
+//  for (int j = 0; j < myVehicles.length; j++) {
+//    myVehicles[j].seek(myAnimals[j].location);
+//    myVehicles[j].update();
+//    myVehicles[j].display();
+//  }
+  
+//}
